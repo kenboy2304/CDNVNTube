@@ -1,0 +1,291 @@
+/*
+	Author: CDNVN
+	Copyright: 2013 - Phim Cơ Đốc
+	Description: Responsive ver 0.01
+*/
+
+@media only screen and (max-width: 979px) {
+	.inner {
+		padding: 0 20px;
+	}
+
+	#slider-film .thumbnail {
+		width: 100%;
+		height: auto;
+	}
+
+	#slider-film .entry {
+		width: 100%;
+		position: relative;
+		padding: 15px 0;
+	}
+
+	#slider-film .entry-desc {
+		display: none;
+	}
+	
+	#slider-film .entry .entry-title, #slider-film .entry .entry-metadata {
+		padding: 0 12px;
+	}
+
+	.post-loop > li {
+		width: 29.3333333333%;
+		margin-right: 3.3333333333%;
+		height: auto;
+	}
+
+	.post-loop > li .thumbnail {
+		height: auto;
+	}
+
+	.post-loop > li:nth-child(3n+3) {
+		margin-right: 0px;
+	}
+
+	.post-loop > li:nth-child(4n+4) {
+		margin-right: 3.3333333333%;
+	}
+
+	.copyright {
+		left: 20px;
+	}
+}
+
+
+@media only screen and (max-width: 720px) {
+	.inner {
+		padding: 0 20px;
+	}
+
+	h1#logo {
+		display: block;
+		width: 97px;
+		text-align: center;
+		position: absolute;
+		top: 10px; left: 50%;
+		margin-left: -48.5px;
+	}
+	
+	#primary-menu {
+		padding: 0px;
+	}
+
+	#primary-menu .inner {
+		padding: 0px;
+	}
+
+	#main-nav nav {
+		position: relative;
+	}
+
+
+	#main-nav #search-form.effect {
+		width: calc(100% - 77px);
+	}
+
+	#main-nav #search-form .s-input {
+		width: 96%;
+		padding: 5px 2%;
+	}
+	
+	#main-nav #search-form .s-submit {
+		top: 4px;
+	}
+
+	#main-nav #search-form .s-submit span.icon {
+		color: white;
+		font-size: 20px;
+	}
+
+	#main-nav #search-form .s-submit span.effect {
+		color: #2b2b2b;
+	}
+
+	#main-nav .pull {
+		display: block;
+		float: none;
+		margin-left: 20px;
+		width: 20px;
+	}
+	
+
+	#main-nav .pull-search .text {
+		display: none;
+	}
+
+	#main-nav .pull-search span.icon {
+		margin-right: 0px;
+	}
+
+	#main-nav .close-pull-search {
+		padding:  5px 7px;
+	}
+
+	#main-nav .pull-search, #main-nav .close-pull-search {
+		top: -1px; right: 20px;
+	}
+
+	#search-form .s-input, #search-form .s-submit {
+		font-size: 1.2em;
+	}
+
+	.main-nav-menu {
+		text-align: center;
+		display: none;
+		float: none;
+		margin-right: 0px;
+	}
+
+	.main-nav-menu > li {
+		display: block;
+		margin: 0px;
+		border-top: 1px solid #222;
+	}
+	
+	.main-nav-menu > li a {
+		display: block;
+	}
+
+	.main-nav-menu li.sub-menu a:after {
+		display: none;
+	}
+	
+	.main-nav-menu ul.child-menu {
+		opacity: 1;
+		visibility: visible;
+		position: relative;
+		top: 0px;
+		width: 100%;
+		padding: 0px;
+	}
+	
+	.main-nav-menu ul.child-menu {
+		background: #1f1f1f;
+	}
+
+	.main-nav-menu ul.child-menu li {
+		padding: 6px 0;
+		border-bottom: 1px solid #111;
+	}
+
+	.main-nav-menu ul.child-menu li:last-child {
+		padding: 6px 0px;
+	}
+	
+	.main-nav-menu ul.child-menu li a:hover {
+		color: white;
+	}
+
+	.post-loop > li {
+		width: 45.33333333333333%;
+		margin-right: 5.3333333333%;
+	}
+
+	.post-loop > li:nth-child(3n+3) {
+		margin-right: 5.3333333333%;
+	}
+
+	.post-loop > li:nth-child(4n+4) {
+		margin-right: 5.3333333333%;
+	}
+
+	.post-loop > li:nth-child(2n+2) {
+		margin-right: 0px;
+	}
+	
+	.footer-menu-widget {
+		width: 100%;
+	}
+
+	.footer-menu-widget > li {
+		display: block;
+		width: 100%;
+		margin-bottom: 30px;
+	}
+
+	.fb-like-box {
+		float: none;
+	}
+
+	.fb-like-box iframe {
+		width: 100%;
+	}
+	
+	.copyright {
+		left: 20px;
+	}
+
+	/* Detail Page */
+	.related .post-loop > li:nth-child(n) {
+		margin: 5px 0 0 0;
+	}
+	
+	.related .post-loop > li .entry {
+		width: auto;
+	}
+
+	#main-content, #sidebar {
+		width: 100%;
+		float: none;
+		margin-right: 0px;
+	}
+
+	.load-more {
+		width: 100%;
+	}
+
+
+	h1, h4 {
+		font-size: 1.1em;
+	}
+}
+
+@media only screen and (max-width: 556px) {
+	.post-loop > li {
+		width: 43.33333333333333%;
+		margin-right: 7.3333333333%;
+	}
+
+	.post-loop > li:nth-child(3n+3) {
+		margin-right: 7.3333333333%;
+	}
+
+	.post-loop > li:nth-child(4n+4) {
+		margin-right: 7.3333333333%;
+	}
+
+	.post-loop > li:nth-child(2n+2) {
+		margin-right: 0px;
+	}
+
+	.post-loop > li .entry {
+		padding: 7px;
+	}
+
+	/* Detail Page */
+	.related .post-loop > li .entry {
+		width: 60%;
+	}
+
+}
+
+@media only screen and (max-width: 480px) {
+	.post-loop > li, .post-loop > li:nth-child(n) {
+		width: calc(100% - 10px);
+		width: -webkit-calc(100% - 10px);
+		width: -moz-calc(100% - 10px);
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.post-loop > li .thumbnail img {
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width: 320px) {
+	.related .post-loop > li .entry {
+		width: 50%;
+	}
+
+}

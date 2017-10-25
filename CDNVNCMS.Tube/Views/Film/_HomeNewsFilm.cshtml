@@ -1,0 +1,142 @@
+﻿@model PagedList.IPagedList<CDNVNCMS.Tube.Entities.Film>
+
+@{
+    var shareUrl = "http://{0}/{1}.html";
+    var havePaging = (bool)ViewBag.HavePaging;
+    var host = Request.Url.Host;
+    if (host.Equals("localhost"))
+    {
+        host = "phimcodoc.com";
+    }
+    string categoryName = (string)ViewBag.CategoryName;
+    string categorySEOName = (string) ViewBag.CategorySEOName;
+}
+
+@helper Truncate(string input, int length)
+{
+    if (!String.IsNullOrEmpty(input))
+    {
+        if (input.Length <= length)
+        {
+    @input
+        }
+        else
+        {
+            while (input[length] != ' ')
+            {
+                length--;
+            }
+    @input.Substring(0, length)<text>...</text>
+        }
+    }
+}
+
+@if (Model != null && Model.Any())
+{
+    <!-- .cate-loop -->
+    <div class="cate-loop">
+        <div class="head-title">
+            <h1><a href="@string.Format("/{0}",categorySEOName)">@categoryName</a></h1>
+        </div>
+
+        <!-- .post-loop -->
+        <ul class="post-loop">
+            @foreach (var item in Model)
+            {
+                var url = "/{0}.html";
+
+                <li>
+                    <article class="item">
+                        <div class="thumbnail">
+                            <div class="centered">
+                                <img src="@item.ImageUrl" alt="@item.Name">
+                            </div>
+                            <a href="@string.Format(url, item.SEOName)" class="thumbnail-hover" title="@item.Name"></a>                          
+                        </div>
+
+                        <div class="entry">
+                            <h3 class="entry-title"><a title="@item.Name" href="@string.Format(url, item.SEOName)">@Truncate(item.Name, 65)</a></h3>
+                            <ul class="entry-metadata">
+                                 @if (item.FilmParts != null)
+                            {
+                                <li class="date">
+                                    @item.FilmParts.Count Tập
+                                </li>
+                            }
+                            </ul>
+                        </div>
+                    </article>
+                </li>
+            }
+        </ul>
+        <!-- /.post-loop -->
+        
+        @if (!string.IsNullOrWhiteSpace(categorySEOName))
+        {
+            <a href="@string.Format("/{0}", categorySEOName)" class="view-all-cate link">Xem tất cả &rarr;</a>
+        }
+        else
+        {
+            @Html.ActionLink("Xem tất cả →","Index","Film", null,new{@class="view-all-cate link"})
+        }
+        
+    </div>
+    <!-- /.cate-loop -->
+}
+
+
+@if (havePaging)
+{
+    var min = Model.PageNumber - 2;
+    var max = Model.PageNumber + 2;
+
+    if (min <= 0)
+    {
+        max = max - min + 1;
+        min = 1;
+    }
+    if (max >= Model.PageCount)
+    {
+        min = min - (max - Model.PageCount);
+        max = Model.PageCount;
+    }
+    if (min <= 0)
+    {
+        min = 1;
+    }
+    <div class="paging">
+
+        @if (Model.IsFirstPage)
+        {
+            <span class="start">Đầu</span>
+            <span>&larr;</span>
+        }
+        else
+        {
+            <a class="start" href="?page=1&size=@Model.PageSize">Đầu</a>
+            <a href="?page=@(Model.PageNumber - 1)&size=@Model.PageSize">&larr;</a>
+        }
+
+        @for (var i = min; i <= max; i++)
+        {
+            if (i != Model.PageNumber)
+            {
+            <a href="?page=@i&size=@Model.PageSize">@i</a>
+            }
+            else
+            {
+            <span>@i</span>
+            }
+        }
+        @if (Model.IsLastPage)
+        {
+            <span>&rarr;</span>
+            <span class="end">Cuối</span>
+        }
+        else
+        {
+            <a href="?page=@(Model.PageNumber + 1)&size=@Model.PageSize">&rarr;</a>
+            <a class="end" href="?page=@(Model.PageCount)&size=@Model.PageSize">Cuối</a>
+        }
+    </div>
+}

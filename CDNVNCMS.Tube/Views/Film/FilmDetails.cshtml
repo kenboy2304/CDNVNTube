@@ -1,0 +1,156 @@
+﻿@model CDNVNCMS.Tube.Entities.Film
+
+@{
+
+    var category = "";
+    var categoryname = "";
+
+    var tap = 1;
+    if (!Request.QueryString["tap"].IsEmpty())
+    {
+        tap = Convert.ToInt32(Request.QueryString["tap"]);
+    }
+    var curentTap = Model.FilmParts.Single(p => p.Order == tap);
+    
+    var shareUrl = "http://{0}/{1}.html";
+    var host = Request.Url.Host;
+    if (host.Equals("localhost"))
+    {
+        host = "phimcodoc.com";
+    }
+
+    if (Model.Categories.Any())
+    {
+        category = Model.Categories.First().SEOName;
+        categoryname = Model.Categories.First().Name;
+    }
+
+}
+    <!-- main-wrapper -->
+    <section id="main-wrapper">
+        <div class="inner">
+            <div id="main-content">
+                <div class="frame">
+
+                    <h1 class="video-title">@Model.Name 
+                    @if (Request.IsAuthenticated)
+                    {
+                        @Html.ActionLink("(Sửa)", "Edit", "FilmManager", new { area = "Admin", id = Model.Id }, null)
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("(Sửa lỗi)", "ErrorDetails", "FilmManager", new { area = "Admin", id = Model.Id }, null)
+                    }</h1>
+
+                    @Html.Partial("_Player",curentTap)
+                    <div class="entry">
+
+                        <div class="entry-eps">
+                            <nav>
+                                <span class="eps-title">Tập: </span>
+
+                                @if (Model.FilmParts != null && Model.FilmParts.Any())
+                                {
+                                    foreach (var part in Model.FilmParts)
+                                    {
+                                        if (part.Order != tap)
+                                        {
+                                            <a href="?tap=@part.Order" class="part">@part.Order</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="current">@part.Order</span>
+                                        }
+
+                                    }
+                                }
+                            </nav>
+                            <button onclick="sendError('@Model.SEOName',@tap)" class="btn">Báo Lỗi</button>
+                        </div>
+                        <!-- /.entry-eps-->
+
+                        <ul class="entry-metadata">
+                            <li class="date"><span class="entry-metadata-title">Ngày đăng: </span>4/11/2013</li>
+                            <li class="cat">
+                                <span class="entry-metadata-title">Chuyên mục: </span>
+                                @if (Model.Categories != null && Model.Categories.Any())
+                            {
+                                foreach (var cat in Model.Categories)
+                                {
+                                    <a href="@string.Format("/{0}", cat.SEOName)">@cat.Name</a><span>, </span>
+                                }
+                            }
+
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.entry -->
+
+                    <div id="tabs">
+                        <ul class="tab-navigation">
+                            <h4><a href="#description">Mô tả</a></h4>
+                            <h4><a href="#share">Chia sẻ</a></h4>
+                        </ul>
+                        <div id="description" class="tab">
+                            <p>
+                                @Html.Raw(Model.Description)
+                            </p>
+                        </div>
+                        <!-- /.tab -->
+
+                        <div id="share" class="tab">
+                            <ul>
+                                <li><a href="#" onclick='window.open(&apos;https://www.facebook.com/sharer/sharer.php?u=&apos;+encodeURIComponent(location.href),&apos;facebook-share-dialog&apos;,&apos;width=626,height=436&apos;);return false;' class="fb" title="Facebook">facebook</a></li>
+                                <li><a href='#' onclick='window.open(&apos;https://plus.google.com/share?url=&apos;+encodeURIComponent(location.href),&apos;facebook-share-dialog&apos;,&apos;width=626,height=436&apos;);return false;' class="gg" title="Google">google</a></li>
+
+                                <li><a href="#" class="tw" title="Twitter">twitter</a></li>
+                                <li><a href="#" class="sk" title="Skype">skype</a></li>
+                                <li><a href="#" class="pin" title="Pinterest">pin</a></li>
+                                <li><a href="#" class="in" title="LinkedIn">in</a></li>
+                            </ul>
+                            <input type="text" value="@string.Format(shareUrl, host, Model.SEOName)" />
+                        </div>
+                        <!-- /.tab -->
+                    </div>
+                    <!-- /#tabs -->
+
+
+                    <div class="comment">
+                        <h4>Bình luận</h4>
+                        @*<div class="fb-comments" data-href="http://phimcodoc.com" data-numposts="5" data-colorscheme="light"></div>*@
+                        <div class="fb-comments" data-href="@string.Format(shareUrl, host, Model.SEOName)" data-numposts="10" data-width="555"></div>
+                    </div>
+                    <!-- /.comment -->
+                </div>
+                <!-- /.frame -->
+            </div>
+            <!-- /#main-content -->
+            @Html.Action("_RelatedFilms", "Film", new { category = category })
+
+            <div class="clear-fix"></div>
+        </div>
+        <!-- /.-inner -->
+    </section>
+    <!-- /#main-wrapper-->
+
+    @section metaTags
+{
+        @Html.Action("_HeadMeta", "Home", new { title = Model.Name, des = Model.MetaDescription, keyword = Model.MetaKeyword, imageUrl = Model.ImageUrl, url = Request.RawUrl })
+    }
+
+    @section scripts
+{
+        <script type="text/javascript">
+            function sendError(SEOName, order) {
+                $.ajax({
+                    url: '@Url.Action("ErrorFilm", "Film")?SEName=' + SEOName + '&order=' + order,
+                type: 'GET',
+                success: function (data) {
+                    alert("Cảm ơn đã báo hỏng. Chúng tôi sẽ kiểm tra lại đường dẫn.");
+                },
+                error: function () {
+                    alert("Hệ thống đang bị sự cố, chúng tôi sẽ kiểm tra lại sau. Cảm ơn!");
+                }
+            });
+
+        }
+        </script>
+    }

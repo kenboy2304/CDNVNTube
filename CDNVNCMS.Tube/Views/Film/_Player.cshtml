@@ -1,0 +1,28 @@
+﻿@model CDNVNCMS.Tube.Entities.FilmPart
+<div class="video-player">
+    @switch (Model.VideoType)
+    {
+        case "googledrive":
+            {
+                <iframe width="560" height="315" src="https://drive.google.com/file/d/@Model.VideoData/preview?autoplay=1" frameborder="0" allowfullscreen></iframe>
+                break;
+            }
+        case "html":
+        {
+                @Html.Raw(Model.VideoData)
+                break;
+            }
+        case "url":
+        {
+            <video id="media-video"class="video-js vjs-default-skin" controls preload="none" width="100%" data-setup="{}">
+                <source src="@Model.VideoData" type="video/mp4">
+            </video>
+            break;
+        }
+        default:
+            {
+                <iframe src="https://www.youtube.com/embed/@Model.VideoData" frameborder="0" allowfullscreen></iframe>
+                break;
+            }
+    }
+</div>

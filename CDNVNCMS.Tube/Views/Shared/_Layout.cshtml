@@ -1,44 +1,156 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using System.Configuration
+<!doctype html>
+<html lang="vi" itemscope itemtype="http://schema.org/Article">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.5" />
+    @RenderSection("metaTags", required: false)
+    <meta name="robots" content="index,follow" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="/content/themes/filmYT/style.css">
 
+    <link rel="stylesheet" href="/content/themes/filmYT/flexslider.css">
+    <link rel="stylesheet" href="/content/themes/filmYT/responsive.css">
+    <link rel="stylesheet" href="/content/themes/filmYT/video-js.css">
+    
+
+    <link rel="icon" href="/Content/themes/FilmYT/images/logo.svg">
+    <script type="text/javascript" src="/content/themes/filmYT/js/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script type="text/javascript" src="/content/themes/filmYT/js/theme.js"></script>
+    <script type="text/javascript" src="/content/themes/filmYT/js/jquery.flexslider.js"></script>
+    <script type="text/javascript" src="/content/themes/filmYT/js/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="/content/themes/filmYT/js/video.dev.js"></script>
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                start: function () { scaleThumb('#slider-film .thumbnail'); }
+            });
+        });
+    </script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+@if (Request.IsAuthenticated)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/_HeadAdmin.cshtml")
+}
+<header>
+    <div id="top-menu">
+        <div class="inner">
+            <ul>
+                <li><a href="#">Điều khoản</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    <!-- /#top-menu -->
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <div id="primary-menu">
+        <div class="inner">
+            <!-- #logo -->
+            <h1 id="logo">
+                <a href="/" title="Phim Cơ Đốc">
+                    <img src="/Content/themes/FilmYT/images/logo.svg" alt="Phim Cơ Đốc"></a>
+            </h1>
+            <!-- /#logo -->
+
+            <!-- #main-nav -->
+            <div id="main-nav">
+                <nav>
+                    <a href="#" class="pull"><span class="icon icon-list"></span></a>
+                    <ul class="main-nav-menu">
+                        <li><a href="/" class="current">Trang chủ</a></li>
+                        <li class="sub-menu"><a href="#" class="current">Chuyên mục</a>
+                            @Html.Action("_CategoryLayout", "Category")
+                        </li>
+                    </ul>
+                    <a href="#" class="pull-search"><span class="icon icon-search"></span><span class="text">Tìm kiếm</span></a>
+                    <a href="#" class="close-pull-search"><span class="icon icon-cross"></span></a>
+                    <div class="clear-fix"></div>
+                </nav>
+            </div>
+            <!-- /#main-nav -->
+        </div>
+    </div>
+    <!-- /#primary-menu-->
+
+    <div id="search">
+        <div class="inner">
+            <!-- #search-form -->
+            <form id="search-form" action="/tim-kiem" method="get">
+                <input class="s-input" type="text" name="query" placeholder="nhập tên phim cần tìm..."/>
+                <button class="s-submit" type="submit" name="s" value="search">Tìm kiếm</button>
+            </form>
+            <!-- /#search-form -->
+        </div>
+    </div>
+</header>
+<!-- /header -->
+@RenderBody()
+<!-- footer -->
+<footer>
+    <div class="inner">
+        <ul class='footer-menu-widget'>
+            <li>
+                <div class="head-title">
+                    <h1>Liên Kết Site</h1>
+                </div>
+                <ul>
+                    @Html.Partial("_Menu")
+                </ul>
+            </li>
+
+            <li>
+                <div class="head-title">
+                    <h1>Hỗ Trợ</h1>
+                </div>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Góp ý</a></li>
+                    <li><a href="#">Đề xuất phim</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <div class="head-title">
+                    <h1>Kết Nối</h1>
+                </div>
+                <ul>
+                    <li><a href="http://facebook.com/phimcodoc">Facebook</a></li>
+                    <li><a href="#">Google+</a></li>
+                    <li><a href="#">Tweeter</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!-- /.footer-widget-menu -->
+
+        <div class="fb-like-box">
+            <div class="fb-like-box" data-href="https://www.facebook.com/PhimCoDoc" data-show-faces="true" data-header="false" data-stream="false" data-show-border="true" data-height="258"></div>
+        </div>
+        <!-- /.fb-like-box -->
+
+        <div class="copyright">
+            <p>&copy; 2013 - Phim Co Doc</p>
+        </div>
+
+        <div class="clear-fix"></div>
+    </div>
+    <!-- /.footer-inner -->
+</footer>
+<!-- /footer -->
+<div id="fb-root"></div>
+<script type="text/javascript">
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/all.js#xfbml=1&appId=@ConfigurationManager.AppSettings["AppId"]";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+@RenderSection("scripts", required: false)
+
 </body>
 </html>

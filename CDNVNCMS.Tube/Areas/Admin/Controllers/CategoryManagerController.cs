@@ -8,6 +8,7 @@ using CDNVNCMS.Tube.Entities;
 
 namespace CDNVNCMS.Tube.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class CategoryManagerController : Controller
     {
         // GET: Admin/CategoryManager

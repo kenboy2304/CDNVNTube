@@ -1,0 +1,25 @@
+﻿
+@{
+    var page = 1;
+    var size = 12;
+    if(!Request.QueryString["page"].IsEmpty())
+    {
+        page = Convert.ToInt32(Request.QueryString["page"]);
+    }
+    if(!Request.QueryString["size"].IsEmpty())
+    {
+        size = Convert.ToInt32(Request.QueryString["size"]);
+    }
+}
+
+<!-- main-wrapper -->
+<section id="main-wrapper" class="category">
+    <div class="inner">
+        @Html.Action("_NewsFilm","Film", new {page = page, size= size})
+    </div>
+    <!-- /.-inner -->
+</section>
+<!-- /#main-wrapper-->
+
+
+

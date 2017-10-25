@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 
 namespace CDNVNCMS.Tube.Entities
@@ -6,6 +7,7 @@ namespace CDNVNCMS.Tube.Entities
     public class Film:GeneralDescription
     {
         public string ImageUrl { get; set; }
+        [Display(Name = "Nổi Bật")]
         public bool IsTrainler { get; set; }
         public virtual List<Category> Categories { get; set; }
         public virtual List<FilmPart> FilmParts { get; set; }

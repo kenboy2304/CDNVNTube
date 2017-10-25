@@ -39,11 +39,11 @@ namespace CDNVNCMS.Tube
 
                 var user = new ApplicationUser
                 {
-                    UserName = "kenboy2304@gmail.com",
-                    Email = "kenboy2304@gmail.com"
+                    UserName = "admin@cdnvn.com",
+                    Email = "admin@cdnvn.com"
                 };
 
-                var chkUser = userManager.Create(user, "Cdnvn@123456");
+                var chkUser = userManager.Create(user, "CDNvn@123456");
 
                 //Add default User to Role Admin   
                 if (chkUser.Succeeded)

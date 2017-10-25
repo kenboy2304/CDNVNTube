@@ -1,0 +1,171 @@
+﻿@model PagedList.IPagedList<CDNVNCMS.Tube.Entities.Film>
+
+@{
+    var shareUrl = "http://{0}/{1}.html";
+    var havePaging = (bool)ViewBag.HavePaging;
+    var host = Request.Url.Host;
+    if (host.Equals("localhost"))
+    {
+        host = "phimcodoc.com";
+    }
+    var categoryName = (string)ViewBag.CategoryName;
+}
+
+@helper Truncate(string input, int length)
+{
+    if (!String.IsNullOrEmpty(input))
+    {
+        if (input.Length <= length)
+        {
+    @input
+        }
+        else
+        {
+            while (input[length] != ' ')
+            {
+                length--;
+            }
+    @input.Substring(0, length)<text>...</text>
+        }
+    }
+}
+
+<!-- .cate-loop -->
+<div class="cate-loop">
+    <div class="head-title">
+        @if (string.IsNullOrWhiteSpace(categoryName))
+        {
+            <h1>Phim Mới</h1>
+        }
+        else
+        {
+            <h1>@ViewBag.CategoryName @if(ViewBag.Id!=null && Request.IsAuthenticated){ @Html.ActionLink("(Sửa)", "Edit", "CategoryManager", new { area = "Admin", id = ViewBag.Id }, null) } </h1>
+        }
+    </div>
+
+    <!-- .post-loop -->
+    <ul class="post-loop">
+        @foreach (var item in Model)
+        {
+            var url = "/{0}.html";
+            <li>
+                <article class="item">
+                    <div class="thumbnail">
+                        <div class="centered">
+                            <img src="@item.ImageUrl" alt="@item.Name">
+                        </div>
+                        <a href="@string.Format(url, item.SEOName)" class="thumbnail-hover"></a>
+                        
+                    </div>
+
+                    <div class="entry">
+                        <h3 class="entry-title"><a href="@string.Format(url, item.SEOName)">@item.Name</a></h3>
+                        <ul class="entry-metadata">
+                            @if (item.FilmParts != null)
+                            {
+                                <li class="date">
+                                    @item.FilmParts.Count Tập
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </article>
+            </li>
+        }
+    </ul>
+</div>
+
+@*<!-- #recent-film -->
+<ul id="recent-film" class="post-loop">
+    <div class="head-title">
+        @if (string.IsNullOrWhiteSpace(categoryName))
+        {
+            <h1><span class="icon icon-video"></span>Phim Mới</h1>
+        }
+        else
+        {
+            <h1><span class="icon icon-folder"></span>Chuyên mục / <span class="cat-title">@categoryName</span></h1>
+        }
+
+    </div>
+    @foreach (var item in Model)
+    {
+        var url = "/{0}.html";
+        
+        <li>
+            <article class="item">
+                <div class="thumbnail">
+                    <a href="@string.Format(url, item.SEOName)" class="thumbnail-hover"></a>
+                    <img src="@item.ImageUrl" alt="@item.Name">
+                </div>
+
+                <div class="entry">
+                    <h3 class="entry-title"><a href="@string.Format(url, item.SEOName)" title="@item.Name">@Truncate(item.Name, 50)</a></h3>
+                    <ul class="entry-metadata">
+                        <li class="date">@item.FilmParts.Count Tập</li>
+                         <li class="view">
+                        <div class="fb-like" data-href="@string.Format(shareUrl, host, item.SEOName)" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+                    </li>
+                    </ul>
+                </div>
+            </article>
+        </li>
+    }
+
+</ul>*@
+
+@if (havePaging)
+{
+    var min = Model.PageNumber - 2;
+    var max = Model.PageNumber + 2;
+
+    if (min <= 0)
+    {
+        max = max - min + 1;
+        min = 1;
+    }
+    if (max >= Model.PageCount)
+    {
+        min = min - (max - Model.PageCount);
+        max = Model.PageCount;
+    }
+    if (min <= 0)
+    {
+        min = 1;
+    }
+    <div class="paging">
+
+        @if (Model.IsFirstPage)
+        {
+            <span class="start">Đầu</span>
+            <span>&larr;</span>
+        }
+        else
+        {
+            <a class="start" href="?page=1&size=@Model.PageSize">Đầu</a>
+            <a href="?page=@(Model.PageNumber - 1)&size=@Model.PageSize">&larr;</a>
+        }
+
+        @for (var i = min; i <= max; i++)
+        {
+            if (i != Model.PageNumber)
+            {
+            <a href="?page=@i&size=@Model.PageSize">@i</a>
+            }
+            else
+            {
+            <span>@i</span>
+            }
+        }
+        @if (Model.IsLastPage)
+        {
+            <span>&rarr;</span>
+            <span class="end">Cuối</span>
+        }
+        else
+        {
+            <a href="?page=@(Model.PageNumber + 1)&size=@Model.PageSize">&rarr;</a>
+            <a class="end" href="?page=@(Model.PageCount)&size=@Model.PageSize">Cuối</a>
+        }
+    </div>
+}

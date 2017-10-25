@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CDNVNCMS.Tube.Entities;
 using PagedList;
+using WebGrease.Css.Extensions;
 
 namespace CDNVNCMS.Tube.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin, Manager")]
+    [Authorize(Roles = "Admin, Manager")]
     public class FilmManagerController : Controller
     {
         private readonly TubeContext db = new TubeContext();
@@ -16,11 +18,21 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
         //
         // GET: /Admin/Film/
 
-        public ActionResult Index(int page = 1, int size = 10)
+        public ActionResult Index(string s, int page = 1, int size = 20)
+        {
+
+            if (page == 0) page = 1;
+            var films = string.IsNullOrWhiteSpace(s)? db.Films.OrderByDescending(f => f.Id).ToPagedList(page, size)
+                                                    :db.Films.Where(item=> item.Name.ToLower().Contains(s.ToLower())).OrderByDescending(item=>item.CreatedDate).ToPagedList(page, size);
+            ViewBag.Button = "Tất Cả Phim";
+            return View(films);
+        }
+        public ActionResult Featured(int page = 1, int size = 20)
         {
             if (page == 0) page = 1;
-            var films = db.Films.OrderByDescending(f => f.Id).ToPagedList(page, size);
-            return View(films);
+            var films = db.Films.Where(item => item.IsTrainler).OrderByDescending(item => item.CreatedDate).ToPagedList(page, size);
+            ViewBag.Button = "Phim Nổi Bật";
+            return View("Index", films);
         }
 
         //
@@ -30,7 +42,8 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
         {
             if (page == 0) page = 1;
             var films = db.Films.Where(f=>f.FilmParts.Any(p=>p.isError)).OrderByDescending(f => f.Id).ToPagedList(page, size);
-            return View(films);
+            ViewBag.Button = "Phim Báo Lỗi";
+            return View("Index",films);
         }
 
         public ActionResult ErrorDetails(int id)
@@ -38,26 +51,22 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
             var film = db.Films.Single(f=>f.Id==id);
             return View(film);
         }
-        
-        [HttpPost]
-        public ActionResult PartEdit(int id, string yId)
+        [ValidateInput(false), HttpPost]
+        public ActionResult UpdatePartFilm(int id, string data, string type, bool error)
         {
-            var part = db.FilmParts.Single(f => f.Id == id);
-            part.VideoData = yId;
-            part.VideoType = "youtubeId";
-            part.isError = false;
+            var part = db.FilmParts.Find(id);
+            if (part == null)
+            {
+                HttpNotFound();
+            }
+            part.isError = error;
+            part.VideoData = data;
+            part.VideoType = type;
             db.Entry(part).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("ErrorDetails", new {id = part.FilmId});
         }
 
-        //
-        // GET: /Admin/Film/Create
-
-        public ActionResult Create()
-        {
-            return View(new Film());
-        }
 
         //
         // POST: /Admin/Film/Create
@@ -76,49 +85,40 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
             return categories;
         }
 
-        private IEnumerable<string> RemoveSpace(string[] strs)
-        {
-            var strings = new List<string>();
-            foreach (var str in strs)
-            {
-                if (str.Length > 0)
-                    strings.Add(str);
-            }
-            return strings.ToArray();
-        }
-
-        private List<FilmPart> GetPart(string[] part, string url)
+        private List<FilmPart> GetPart(string[] partData,string[] partType, string url)
         {
             var partList = new List<FilmPart>();
-            if (part == null) return new List<FilmPart>();
-            var i = 0;
-            foreach (var p in RemoveSpace(part))
+            if (partData == null) return new List<FilmPart>();
+            
+            for (var i =0; i<partData.Length; i++)
             {
-                i++;
+                if(!string.IsNullOrEmpty(partData[i]))
                 partList.Add(new FilmPart
                                   {
                                       CreatedDate = DateTime.Now,
                                       ModifiedDate = DateTime.Now,
                                       Published = true,
-                                      SEOName = url + "-phan-" + i,
-                                      VideoData = p,
-                                      Order = i
+                                      SEOName = url + "-phan-" + (i+1),
+                                      VideoData = partData[i],
+                                      VideoType = partType[i],
+                                      Order = i+1
                                   });
             }
             return partList;
         }
-
-        [HttpPost]
+        public ActionResult Create()
+        {
+            return View(new Film());
+        }
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Film film, int[] Cat, string[] part)
+        public ActionResult Create(Film film, int[] Cat, string[] part, string[] partType)
         {
             if (ModelState.IsValid)
             {
                 film.CreatedDate = film.ModifiedDate = DateTime.Now;
                 film.Categories = GetCategory(Cat);
-                film.FilmParts = GetPart(part, film.SEOName);
-                if (part.Length > 0)
-                    film.ImageUrl = string.Format("http://i1.ytimg.com/vi/{0}/mqdefault.jpg", part[0]);
+                film.FilmParts = GetPart(part, partType, film.SEOName);
                 db.Films.Add(film);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -153,9 +153,9 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
         //
         // POST: /Admin/Film/Edit/5
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int Id, int[] Cat, string[] part, int[] pId)
+        public ActionResult Edit(int Id, int[] Cat, string[] part, string[] partType, int[] pId)
         {
             var film = db.Films.Single(f => f.Id == Id);
             TryUpdateModel(film);
@@ -163,55 +163,78 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
             {
                 film.Categories.Clear();
                 film.Categories = GetCategory(Cat);
-                if (part.Length > 0)
-                    film.ImageUrl = string.Format("http://i1.ytimg.com/vi/{0}/mqdefault.jpg", part[0]);
                 db.Entry(film).State = EntityState.Modified;
                 db.SaveChanges();
-                UpdateParts(part, pId, film.Id, film.SEOName);
+                //UpdateParts(part, pId, film.Id, film.SEOName);
+                db.FilmParts.RemoveRange(db.FilmParts.Where(item => item.FilmId == film.Id));
+                for (var i = 0; i < part.Length; i++)
+                {
+                    if(!string.IsNullOrWhiteSpace(part[i]))
+                        db.FilmParts.Add(new FilmPart
+                        {
+                            FilmId = film.Id,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                            Published = true,
+                            SEOName = film.SEOName + "-phan-" + i + 1,
+                            Order = i + 1,
+                            VideoData = part[i],
+                            VideoType = partType[i]
+                        });
+                }
+                db.SaveChanges();
+                Task.Run( () =>
+                {
+                    
+                });
                 return RedirectToAction("Index");
             }
             return View(film);
         }
-        private void UpdateParts(string[] parts, int[] pId, int fId, string url)
+        [HttpPost]
+        public ActionResult ChangeStatus(int id = 0, string name = "Published")
         {
-            if (pId == null) return;
-            var tap = 0;
-            for (var i = 0; i < parts.Count(); i++)
+            Film film = db.Films.Find(id);
+            if (film == null)
             {
-                if (pId[i] == 0 && parts[i] != "")
-                {
-                    tap++;
-                    db.FilmParts.Add(new FilmPart
-                                         {
-                                             FilmId = fId,
-                                             CreatedDate = DateTime.Now,
-                                             ModifiedDate = DateTime.Now,
-                                             Published = true,
-                                             SEOName = url + "-phan-" + tap,
-                                             Order = tap,
-                                             VideoData = parts[i]
-                                         });
-                }
-                if (pId[i] != 0 && parts[i] == "")
-                {
-                    var del = db.FilmParts.Find(pId[i]);
-                    db.FilmParts.Remove(del);
-                }
-                if (pId[i] != 0 && parts[i] != "")
-                {
-                    tap++;
-                    var update = db.FilmParts.Find(pId[i]);
-                    update.ModifiedDate = DateTime.Now;
-                    update.VideoData = parts[i];
-                    update.SEOName = url + "-phan-" + tap;
-                    update.Order = tap;
-                    db.Entry(update).State = EntityState.Modified;
-                    
-                }
+                return HttpNotFound();
             }
+            if (name == "Published") film.Published = !film.Published;
+            if (name == "Featured") film.IsTrainler = !film.IsTrainler;
+            db.Entry(film).State = EntityState.Modified;
             db.SaveChanges();
+            return Content("Đã cập nhật "+film.Name+": "+name);
         }
 
+        public ActionResult ChangeImage(int id = 0, string action="update", string url="")
+        {
+            Film film = db.Films.Find(id);
+            if (film == null)
+            {
+                return HttpNotFound();
+            }
+            switch (action)
+            {
+                case "insert":
+                {
+                    film.ImageUrl = url;
+                    break;
+                }
+                case "update":
+                {
+                    film.ImageUrl = url;
+                    break;
+                }
+                case "delete":
+                {
+                    film.ImageUrl = "";
+                    break;
+                }
+            }
+            db.Entry(film).State = EntityState.Modified;
+            db.SaveChanges();
+            return Content("Hình ảnh của '" + film.Name + "' đã "+ action + " thành công!");
+        }
 
         //
         // GET: /Admin/Film/Delete/5
@@ -239,28 +262,7 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Insert(int size = 100)
-        {
-            string[] parts = new[] { "D04_wN-ffzQ", "w7nCoyB59NQ", "dY64HO_hTZo" };
-
-            for (int i = 0; i < size; i++)
-            {
-                db.Films.Add(new Film
-                {
-                    Name = "Film " + (i + 1),
-                    SEOName = "film-" + (i + 1),
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    Published = true,
-                    FilmParts = GetPart(parts, "film-" + (i + 1)),
-                    ImageUrl = string.Format("http://i1.ytimg.com/vi/{0}/mqdefault.jpg", parts[0]),
-                    Categories = db.Categories.ToList(),
-                    Order = 0
-                });
-            }
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+      
 
         public ActionResult DeleteAll()
         {
@@ -272,15 +274,6 @@ namespace CDNVNCMS.Tube.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult ReInsert(int size = 100)
-        {
-            foreach (var film in db.Films)
-            {
-                db.Films.Remove(film);
-            }
-            db.SaveChanges();
-            return RedirectToAction("Insert", new { size = size });
-        }
 
 
         protected override void Dispose(bool disposing)

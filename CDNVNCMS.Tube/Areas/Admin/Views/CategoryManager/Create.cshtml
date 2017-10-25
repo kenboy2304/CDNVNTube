@@ -6,24 +6,28 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Category</legend>
+    <div class="form-horizontal">
         @Html.Partial("_formEdit", Model)
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Create"/>
         </p>
-    </fieldset>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        @section scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")" type="text/javascript"></script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                   
+                });
+            </script>
+        }

@@ -20,5 +20,15 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+  
+}
+table td {
+    vertical-align: middle !important;
+}
+table td:first-child {
+    text-align: center;
+}
+.div-inline{display: inline-block}
+select.btn {
+    height: 34px;
 }

@@ -1,0 +1,43 @@
+﻿@model PagedList.IPagedList<CDNVNCMS.Tube.Entities.Film>
+
+<!-- #slide-film -->
+@if(Model!=null && Model.Any())
+{
+    <div id="slider-film">
+    <div class="slider-film-inner flexslider">
+        <ul class="slides">
+            @foreach(var item in Model)
+            {
+                <li>
+                <div class="thumbnail">
+                    <div class="centered">
+                        <img src="@item.ImageUrl" alt="">
+                    </div>
+                    <a href="@string.Format("/{0}.html",item.SEOName)" class="thumbnail-hover"></a>
+                        
+                </div>
+
+                <div class="entry">
+                    <h3 class="entry-title"><a href="@string.Format("/{0}.html",item.SEOName)">@item.Name</a></h3>
+                    <ul class="entry-metadata">
+                        <li class="date">
+                            @if(item.FilmParts!=null && item.FilmParts.Any())
+                            {
+                                <span>@item.FilmParts.Count Tập</span>
+                            }
+                        </li>
+
+                        <p class="entry-desc">
+                            @Html.Raw(item.Description)
+                        </p>
+                    </ul>
+                </div>
+
+            </li>
+            }
+        </ul>
+    </div>
+</div>
+<!-- /#slide-film -->
+}
+

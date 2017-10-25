@@ -1,0 +1,9 @@
+﻿@model IEnumerable<CDNVNCMS.Tube.Entities.Category>
+
+@if(Model!=null && Model.Any())
+{
+    foreach (var category in Model)
+    {
+        @Html.Action("_NewsFilm","Film", new {category=category.SEOName, page = 1, size= 4, havePaging = false})
+    }
+}

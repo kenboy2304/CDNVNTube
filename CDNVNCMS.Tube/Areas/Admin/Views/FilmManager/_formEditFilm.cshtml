@@ -1,99 +1,103 @@
 ﻿@model CDNVNCMS.Tube.Entities.Film
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.Name)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.Name)
-    <input type="checkbox" id="checkInput" checked="checked"/>
-    @Html.ValidationMessageFor(model => model.Name)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10 form-inline">
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        <input type="checkbox" id="checkInput" checked="checked" />
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
 </div>
 
-<div class="editor-label">
-     @Html.LabelFor(model => model.SEOName) 
-</div>
-<div class="editor-field">
-    @HttpContext.Current.Request.Url.DnsSafeHost/
-    @Html.EditorFor(model => model.SEOName)
-    .html
-    @Html.ValidationMessageFor(model => model.SEOName)
-</div>
-
-<div class="editor-label">
-    @Html.LabelFor(model => model.MetaKeyword)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.MetaKeyword)
-    @Html.ValidationMessageFor(model => model.MetaKeyword)
+<div class="form-group">
+    @Html.LabelFor(model => model.SEOName, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.SEOName, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.SEOName, "", new { @class = "text-danger" })
+    </div>
 </div>
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.MetaDescription)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.MetaDescription)
-    @Html.ValidationMessageFor(model => model.MetaDescription)
-</div>
-
-<div class="editor-label">
-    @Html.LabelFor(model => model.Description)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.Description)
-    @Html.ValidationMessageFor(model => model.Description)
+<div class="form-group">
+    @Html.LabelFor(model => model.MetaKeyword, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.MetaKeyword, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.MetaKeyword, "", new { @class = "text-danger" })
+    </div>
 </div>
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.IsTrainler)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.IsTrainler)
-    @Html.ValidationMessageFor(model => model.IsTrainler)
+<div class="form-group">
+    @Html.LabelFor(model => model.MetaDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.MetaDescription, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.MetaDescription, "", new { @class = "text-danger" })
+    </div>
 </div>
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.ImageUrl)
+<div class="form-group">
+    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
 </div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.ImageUrl)
-    @Html.ValidationMessageFor(model => model.ImageUrl)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.IsTrainler, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10 checkbox">
+        @Html.CheckBoxFor(model => model.IsTrainler, new { @class = "form-control", data_onstyle = "info", data_on = "Nổi Bật", data_off = "Tắt", data_toggle = "toggle" })
+        @Html.ValidationMessageFor(model => model.IsTrainler, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
+    </div>
 </div>
 
 @Html.Action("_Category", "CategoryManager", new { Checkeds = Model.Categories })
 
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.Published)
+<div class="form-group">
+    @Html.LabelFor(model => model.Published, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10 checkbox">
+        @Html.CheckBoxFor(model => model.Published, new { @class = "form-control", data_onstyle = "primary", data_on = "Bật", data_off = "Tắt", data_toggle = "toggle" })
+        @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+    </div>
 </div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.Published)
-    @Html.ValidationMessageFor(model => model.Published)
-</div>
-
-<div class="editor-label">
-    @Html.LabelFor(model => model.Order)
-</div>
-<div class="editor-field">
-    @Html.EditorFor(model => model.Order)
-    @Html.ValidationMessageFor(model => model.Order)
+<div class="form-group">
+    @Html.LabelFor(model => model.Order, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Order, new { htmlAttributes = new { @class = "form-control" } })
+        
+        @Html.ValidationMessageFor(model => model.Order, "", new { @class = "text-danger" })
+    </div>
 </div>
 
 <div class="editor-part">
-    
     @{
         var count = 0;
+        var partType = "<div class=\"input-group\"><span class=\"input-group-btn\"><select class=\"btn btn-default\" name=\"partType\"><option value=\"youtube\">Youtube</option><option value=\"googledrive\">Google Drive</option><option value=\"html\">Html</option><option value=\"url\">Url</option></select></span>";
     }
-    @if (Model.FilmParts==null||!Model.FilmParts.Any())
+    @if (Model.FilmParts == null || !Model.FilmParts.Any())
     {
         count++;
-       <div class="part" part="1">
-            <div class="editor-label">
-                <label>Tập 1 (Youtube):</label>
+        <div class="form-group" part="1">
+            <div class="control-label col-md-2">
+                <label>Tập 1:</label>
             </div>
-           <div class="editor-field">
-               <input type="hidden" name="pId" value="0"/>
-               <input type="text" part="1" name="Part" />
-           </div>
+            <div class="col-md-10">
+                @Html.Raw(partType)<input class="form-control" type="text" part="1" name="Part"/>
+                @Html.Raw("</div>")
+            </div>
         </div>
     }
     else
@@ -101,36 +105,40 @@
         foreach (var filmPart in Model.FilmParts)
         {
             count++;
-            <div class="part" part="@count">
-                <div class="editor-label">
-                    <label>Tập @count (Youtube):
+            <div class="form-group" part="@count">
+                <div class="control-label col-md-2">
+                    <label>
+                        Tập @count:
                     </label>
                 </div>
-                <div class="editor-field">
-                    <input type="hidden" name="pId" value="@filmPart.Id"/>
-                    <input type="text" part="@count" name="Part" value="@filmPart.VideoData" />
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-btn"><select class="btn btn-default" name="partType"><option @(string.IsNullOrWhiteSpace(filmPart.VideoType) || filmPart.VideoType == "youtube" ? "selected" : "") value="youtube">Youtube</option><option @(filmPart.VideoType == "googledrive" ? "selected" : "") value="googledrive">Google Drive</option><option @(filmPart.VideoType == "html" ? "selected" : "") value="html">Html</option><option @(filmPart.VideoType == "url" ? "selected" : "") value="url">Url</option></select></span><input type="text" part="@count" class="form-control" name="Part" value="@filmPart.VideoData" />
+                    </div>
                 </div>
             </div>
         }
 
     }
-    <a class="t-button add-part" onclick="AddPart()">Thêm+</a>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <a class="btn btn-success" onclick="AddPart()">Thêm+</a>
+    </div>
+</div>
+    
+    
     <script type="text/javascript">
         part = '@count';
         function AddPart() {
             part++;
-            var str = '<div class="part" part="' + part + '">' +
-                '<div class="editor-label">' +
-                '<label>Tập ' + part + ' (Youtube):</label>' +
-                '</div>' +
-                '<div class="editor-field">' +
-                '<input type="hidden" name="pId" value="0"/>'+
-                '<input type="text" part="' + part + '" name="Part" />' +
-                '</div>';
-            $('.add-part').before(str);
+            var str = '<div class="form-group" part="' +part +'">' +
+                '<div class="control-label col-md-2"><label>Tập ' +part +':</label></div>' +
+                '<div class="col-md-10">@Html.Raw(partType)<input type="text" part="' +part +'" class="form-control" name="Part" value="" /></div></div></div>';
+            $('.editor-part').append(str);
         }
     </script>
-</div>
+
 
 
 

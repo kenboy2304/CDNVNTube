@@ -17,5 +17,7 @@ namespace CDNVNCMS.Tube
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        private string themes = System.Configuration.ConfigurationManager.AppSettings["Theme"];
+        
     }
 }

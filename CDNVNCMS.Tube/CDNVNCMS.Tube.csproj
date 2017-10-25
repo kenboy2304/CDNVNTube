@@ -196,6 +196,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <None Include="App_Start\RouteConfig.cs_" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
@@ -207,6 +208,8 @@
     <Compile Include="Areas\Admin\Models\MetaTagModel.cs" />
     <Compile Include="Areas\Admin\Models\SettingModels.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\FilmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Entities\Category.cs" />
@@ -229,10 +232,15 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GenericModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MetaTagModel.cs" />
+    <Compile Include="Models\SettingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Content Include="Views\Film\_Player.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\2013.2.611\Black\editor.png" />
@@ -443,6 +451,7 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\defaut-img.jpg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -498,6 +507,39 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\FilmYT\cdnvn.player-min.css" />
+    <Content Include="Content\themes\FilmYT\flexslider.css" />
+    <Content Include="Content\themes\FilmYT\fonts\icomoon.svg" />
+    <Content Include="Content\themes\FilmYT\font\vjs.svg" />
+    <Content Include="Content\themes\FilmYT\images\ajax-loader.gif" />
+    <Content Include="Content\themes\FilmYT\images\control-sprite.png" />
+    <Content Include="Content\themes\FilmYT\images\logo.png" />
+    <Content Include="Content\themes\FilmYT\images\logo.svg" />
+    <Content Include="Content\themes\FilmYT\images\menu-sprite.png" />
+    <Content Include="Content\themes\FilmYT\images\slide-sprite.png" />
+    <Content Include="Content\themes\FilmYT\images\slide1.jpg" />
+    <Content Include="Content\themes\FilmYT\images\slide2.jpg" />
+    <Content Include="Content\themes\FilmYT\images\social_sprite.png" />
+    <Content Include="Content\themes\FilmYT\images\sprite.png" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail1.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail2.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail4.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail5.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail6.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail7.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail8.jpg" />
+    <Content Include="Content\themes\FilmYT\images\thumbnail9.jpg" />
+    <Content Include="Content\themes\FilmYT\images\video-logo.png" />
+    <Content Include="Content\themes\FilmYT\js\cdnvn.player-min.js" />
+    <Content Include="Content\themes\FilmYT\js\jquery-1.9.1.js" />
+    <Content Include="Content\themes\FilmYT\js\jquery.easing.min.js" />
+    <Content Include="Content\themes\FilmYT\js\jquery.flexslider.js" />
+    <Content Include="Content\themes\FilmYT\js\theme.js" />
+    <Content Include="Content\themes\FilmYT\js\video.dev.js" />
+    <Content Include="Content\themes\FilmYT\responsive.css" />
+    <Content Include="Content\themes\FilmYT\style.css" />
+    <Content Include="Content\themes\FilmYT\video-js.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -564,7 +606,17 @@
     <Content Include="Areas\Admin\Views\PartManager\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\PartManager\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
+    <Content Include="Scripts\ckeditor\CHANGES.html" />
+    <Content Include="Scripts\ckeditor\ckeditor.asp" />
+    <Content Include="Scripts\ckeditor\ckeditor.php" />
+    <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
+    <Content Include="Scripts\ckeditor\ckeditor_basic_source.js" />
+    <Content Include="Scripts\ckeditor\ckeditor_php4.php" />
+    <Content Include="Scripts\ckeditor\ckeditor_php5.php" />
+    <Content Include="Scripts\ckeditor\ckeditor_source.js" />
     <Content Include="Scripts\ckeditor\config.jsold" />
+    <Content Include="Scripts\ckeditor\INSTALL.html" />
+    <Content Include="Scripts\ckeditor\LICENSE.html" />
     <Content Include="Scripts\ckeditor\plugins\scayt\LICENSE.md" />
     <Content Include="Scripts\ckeditor\plugins\scayt\README.md" />
     <Content Include="Scripts\ckeditor\plugins\wsc\LICENSE.md" />
@@ -580,10 +632,21 @@
     <Content Include="Scripts\ckfinder\skins\v1\images\toolbar\Thumbs.db" />
     <Content Include="Scripts\ckfinder\userfiles\.htaccess" />
     <Content Include="Content\bootstrap-toggle.less" />
+    <Content Include="Areas\Admin\Views\CategoryManager\tesxt.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Lockout.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HeadAdmin.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="Scripts\ckeditor\ckeditor.pack" />
+    <Content Include="Content\themes\FilmYT\fonts\icomoon.eot" />
+    <Content Include="Content\themes\FilmYT\fonts\icomoon.ttf" />
+    <Content Include="Content\themes\FilmYT\fonts\icomoon.woff" />
+    <Content Include="Content\themes\FilmYT\font\vjs.eot" />
+    <Content Include="Content\themes\FilmYT\font\vjs.ttf" />
+    <Content Include="Content\themes\FilmYT\font\vjs.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\ckeditor\build-config.js" />
@@ -1772,6 +1835,29 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\StringVietnameseToSlug.js" />
+    <Content Include="Upload\bi-bo-lai.jpg" />
+    <Content Include="Upload\conurageous.jpg" />
+    <Content Include="Upload\Doi Giay Do.png" />
+    <Content Include="Upload\Fireproof-logo-2.jpg" />
+    <Content Include="Upload\Giang Baptit%280%29.png" />
+    <Content Include="Upload\Giang Baptit.png" />
+    <Content Include="Upload\Giăng Báp-tít.png" />
+    <Content Include="Upload\in-the-begining.jpg" />
+    <Content Include="Upload\Joseph-King-of-Dreams.jpg" />
+    <Content Include="Upload\kingofkings.jpg" />
+    <Content Include="Upload\martin-luther-king.jpg" />
+    <Content Include="Upload\martin-luther.jpg" />
+    <Content Include="Upload\Mon Qua Cua Gia-cop.png" />
+    <Content Include="Upload\Ngai Song Giua Vong Chung Ta.png" />
+    <Content Include="Upload\ten-commandments-mormon-moses%280%29.jpg" />
+    <Content Include="Upload\ten-commandments-mormon-moses.jpg" />
+    <Content Include="Upload\Thap Tu Gia Va Con Dao Bam%280%29.jpg" />
+    <Content Include="Upload\Thap Tu Gia Va Con Dao Bam.jpg" />
+    <Content Include="Upload\the-bible.jpg" />
+    <Content Include="Upload\the-book-of-daniel.jpg" />
+    <Content Include="Upload\Vi Bac Si Thu Tu.png" />
+    <Content Include="Upload\you sin christ%280%29.png" />
+    <Content Include="Upload\you sin christ.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1781,11 +1867,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -1804,8 +1885,24 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Category\CategoryDetails.cshtml" />
+    <Content Include="Views\Category\_CategoryHome.cshtml" />
+    <Content Include="Views\Category\_CategoryMenu.cshtml" />
+    <Content Include="Views\Film\FilmDetails.cshtml" />
+    <Content Include="Views\Film\Index.cshtml" />
+    <Content Include="Views\Film\_FeaturedFilm.cshtml" />
+    <Content Include="Views\Film\_HomeNewsFilm.cshtml" />
+    <Content Include="Views\Film\_NewsFilm.cshtml" />
+    <Content Include="Views\Film\_RelatedFilms.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Category.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Home\_HeadMeta.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

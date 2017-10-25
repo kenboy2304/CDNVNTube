@@ -1,0 +1,36 @@
+﻿@model CDNVNCMS.Tube.Entities.Category
+
+@{
+    ViewBag.Current = Model;
+    var page = 0;
+    var size = 12;
+    if (!Request.QueryString["page"].IsEmpty())
+    {
+        page = Convert.ToInt32(Request.QueryString["page"]);
+    }
+    if (!Request.QueryString["size"].IsEmpty())
+    {
+        size = Convert.ToInt32(Request.QueryString["size"]);
+    }
+    ViewBag.Current = Model.SEOName;
+}
+
+<!-- main-wrapper -->
+<section id="main-wrapper" class="category">
+    <div class="inner">
+        @if (!string.IsNullOrWhiteSpace(Model.SEOName))
+        {
+            @Html.Action("_NewsFilm", "Film", new { category = Model.SEOName, page = page, size = size, havePaging = true })
+        }
+    </div>
+    <!-- /.-inner -->
+</section>
+<!-- /#main-wrapper-->
+
+
+
+@section metaTags
+{
+    @Html.Action("_HeadMeta", "Home", new { title = Model.Name, des = Model.MetaDescription, keyword = Model.MetaKeyword, url = Request.RawUrl })
+}
+

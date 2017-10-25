@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CDNVNCMS.Tube.Entities.Category>
+<ul class="child-menu">
+    @foreach (var item in Model)
+        {
+            if (!String.IsNullOrWhiteSpace(ViewBag.CategoryCurrent) && item.SEOName.Equals(ViewBag.CategoryCurrent))
+            {
+            <li class="current"><span></span><a href="/@item.SEOName">@item.Name</a></li>
+            }
+            else
+            {
+            <li><span></span><a href="/@item.SEOName">@item.Name</a></li>
+            }
+        }
+</ul>
+<!-- /.menu -->

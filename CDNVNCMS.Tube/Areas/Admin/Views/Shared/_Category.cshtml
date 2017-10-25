@@ -56,10 +56,11 @@
         }
     }
 }
-
-<div class="editor-label">
-        @Html.Label("Catalogs", "Catalogs")
+<div class="form-group"> 
+<div class="control-label col-md-2">
+        <label>@Html.Label("Danh Mục", "Catalogs")</label>
     </div>
-    <div class="editor-field editor-categories">
-        @ShowCategory(Model, checkeds)
-    </div>
+<div class="col-md-10">
+    @ShowCategory(Model, checkeds)
+</div>
+</div>

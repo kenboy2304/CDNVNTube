@@ -11,40 +11,72 @@
 {
     foreach (var filmPart in Model.FilmParts)
     {
-       
-            using (Html.BeginForm("PartEdit","FilmManager",FormMethod.Post))
-             {
-                 <p>
-                     <input type="hidden"  name="id" value="@(filmPart.Id)"/>
-                     <input type="text" name="yId" value="@filmPart.VideoData"/>
-                     <a class="t-button view-film" >Kiểm tra</a>
-                     <button type="submit" class="t-button">Sửa</button>
-                     @if (filmPart.isError)
-                     {
-                         <span style="color: red">
-                             Người dùng báo link hỏng
-                         </span>
-                     }
-                 </p>
-            
+        <div class="row">
+        @using (Html.BeginForm("UpdatePartFilm", "FilmManager", FormMethod.Post))
+        {
+            <div class="col-md-1 text-right">
+                @Html.CheckBox("error", filmPart.isError, new { @class = "form-control", data_toggle = "toggle", data_id = filmPart.isError, data_onstyle = "danger" })
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" name="id" value="@(filmPart.Id)" />
+                    <div class="input-group @(filmPart.isError?"has-error":"")">
+
+                        <input type="text" class="form-control" name="data" value="@filmPart.VideoData" />
+                        <div class="input-group-btn">
+                            <select class="btn btn-default" name="type"><option @(string.IsNullOrWhiteSpace(filmPart.VideoType) || filmPart.VideoType == "youtube" ? "selected" : "") value="youtube">Youtube</option><option @(filmPart.VideoType == "googledrive" ? "selected" : "") value="googledrive">Google Drive</option><option @(filmPart.VideoType == "html" ? "selected" : "") value="html">Html</option><option @(filmPart.VideoType == "url" ? "selected" : "") value="url">Url</option></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <button onclick="playvideo('@filmPart.VideoData', '@filmPart.VideoType')" type="button" class="btn btn-default">Xem thử</button>
+                <button type="submit" class="btn btn-warning">Sữa Lỗi</button>
+                
+            </div>
         }
+        </div>
 
     }
 }
-
-<p>
+<div class="row">
+    <div class="col-md-offset-1 col-md-11">
+        @Html.ActionLink("Sửa Phim", "Edit", "FilmManager", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Xem Phim", "FilmDetails", "Film", new { area = "", keyword = Model.SEOName }, new { @class = "btn btn-info" })
+        @Html.ActionLink("Trở Về trang quản lý", "Index", "FilmManager", new { id = Model.Id }, new { @class = "btn btn-default" })
+    </div>
+</div>
+@*<p>
     <a class="t-button" href="@Url.Action("Error","FilmManager")">Lỗi khác</a>
-</p>
+</p>*@
 
 @section scripts
 {
-        <script type="text/javascript">
-        $(document).ready(function () {
-            $(".view-film").click(function () {
-                var link = $(this).prev().attr("value");
-                var myWindow = window.open("", "Xem thử", "width=580,height=335,location=no,toolbar=no,menubar=no");
-                myWindow.document.write('<iframe width="560" height="315" src="//www.youtube.com/embed/'+link+'" frameborder="0" allowfullscreen></iframe>');
-            });
-        });
+    <script type="text/javascript">
+        function playvideo(data, type) {
+            alert(data + " " + type);
+            var myWindow = window.open("", "Xem thử", "width=575,height=325,location=no,toolbar=no,menubar=no");
+            switch (type) {
+                case "googledrive":
+                    {
+                        myWindow.document.write('<iframe width="560" height="315" src="https://drive.google.com/file/d/' + data + '/preview?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+                        break;
+                    }
+                case "html":
+                    {
+
+                        myWindow.document.write(data);
+                        break;
+                    }
+                case "url":
+                    {
+                        myWindow.document.write('<video width="560" controls src="'+data+'"></video >');
+                        break;
+                    }
+                default:
+                    myWindow.document.write('<iframe width="560" height="315" src="//www.youtube.com/embed/' + data + '" frameborder="0" allowfullscreen></iframe>');
+                    break;
+            }
+        }
     </script>
 }
